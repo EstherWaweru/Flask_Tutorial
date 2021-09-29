@@ -1,4 +1,4 @@
-from .forms import RegistrationForm
+from .forms import LoginForm, RegistrationForm
 from . import users_bp
 from flask import flash,render_template,abort,redirect,request,url_for,current_app
 from app.models import User
@@ -32,3 +32,16 @@ def register():
         else:
             flash('Error in form data!', 'error')
     return render_template('users/registration.html', form = form)
+
+@users_bp.route('/login', methods = ['GET','POST'])
+def login():
+    form = LoginForm()
+    
+    if request.method == 'POST':
+        if form.validate_on_submit():
+            user = User.query.filter_by(email = form.email.data).first()
+            if user and user.is_password_correct(form.password.data):
+                flash('Login succeeded','success')
+                return redirect(url_for('auth.about'))
+        flash('ERROR! Incorrect login credentials.', 'error')
+    return render_template('users/login.html', form = form)
