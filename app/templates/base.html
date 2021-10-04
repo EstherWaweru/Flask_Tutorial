@@ -18,20 +18,12 @@
   <body>
     <header class="site-header">
       <nav class="nav">
-        <a class="nav-link logo" href="{{ url_for('auth.index') }}">Flask Stock Portfolio App</a>
+        <a class="nav-link logo" href="{{ url_for('users.about') }}">Flask Stock Portfolio App</a>
         <ul class="nav-list">
-          {% if current_user.is_authenticated %}
-            <!-- <li class="nav-item"><a class="nav-link" href="{{ url_for('stocks.list_stocks') }}">Portfolio</a></li>
-            <li class="nav-item"><a class="nav-link" href="{{ url_for('watchlist.watchlist') }}">Watchlist</a></li>
-            <li class="nav-item"><a class="nav-link" href="{{ url_for('users.user_profile') }}">Profile</a></li> -->
-            {% if current_user.user_type == 'Admin' %}
-              <li class="nav-item"><a class="nav-link" href="{{ url_for('admin.admin_list_users') }}">Admin</a></li>
-            {% endif %}
-            <li class="nav-item"><a class="nav-link" href="{{ url_for('auth.logout') }}">Logout</a></li>
-          {% else %}
-            <li class="nav-item"><a class="nav-link" href="{{ url_for('auth.register') }}">Register</a></li>
-            <li class="nav-item"><a class="nav-link" href="{{ url_for('auth.login') }}">Login</a></li>
-          {% endif %}
+        
+            <li class="nav-item"><a class="nav-link" href="{{ url_for('users.register') }}">Register</a></li>
+            <li class="nav-item"><a class="nav-link" href="{{ url_for('users.login') }}">Login</a></li>
+         
         </ul>
       </nav>
     </header>

@@ -12,7 +12,7 @@ class User(database.Model):
 
     id = database.Column(database.Integer,primary_key = True)
     email = database.Column(database.String, unique = True)
-    password = database.Column(database.String(60))
+    password = database.Column(database.String)
     created_at = database.Column(database.DateTime)
     email_confirmed = database.Column(database.Boolean, default = False)
     user_type = database.Column(database.String, default = 'User') #admin,superadmin
@@ -30,7 +30,7 @@ class User(database.Model):
         self.created_at = datetime.now()
     
     def is_password_correct(self, password: str):
-        check_password_hash(self.password,password)
+        return check_password_hash(self.password,password)
  
     def __repr__(self):
         return f'User: {self.email}'
