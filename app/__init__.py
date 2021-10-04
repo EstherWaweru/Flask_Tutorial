@@ -1,7 +1,8 @@
-from flask import Flask, config
+from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_mail import Mail
 import os
+
 #######################
 #### Configuration ####
 #######################
@@ -11,6 +12,7 @@ import os
 # attached to the Flask application at this point.
 
 database = SQLAlchemy()
+from .models import User
 mail = Mail()
 
 ######################################
@@ -26,7 +28,10 @@ def create_app():
     app.config.from_object(config_type)
 
     initialize_extensions(app)
-    register_blueprints(app)
+    # register_blueprints(app)
+    with app.app_context():
+        database.create_all()
+
     return app
 
 def initialize_extensions(app):
@@ -41,6 +46,9 @@ def register_blueprints(app):
     # Since the application instance is now created, register each Blueprint
     # with the Flask application instance (app)
     pass
+
+
+
 
 
 

@@ -1,5 +1,5 @@
-from app import database
-import datetime
+from . import database
+from datetime import datetime
 from werkzeug.security import check_password_hash
 from werkzeug.security import generate_password_hash
 
@@ -13,7 +13,7 @@ class User(database.Model):
     id = database.Column(database.Integer,primary_key = True)
     email = database.Column(database.String, unique = True)
     password = database.Column(database.String(60))
-    created_at = database.Column(database.Datetime)
+    created_at = database.Column(database.DateTime)
     email_confirmed = database.Column(database.Boolean, default = False)
     user_type = database.Column(database.String, default = 'User') #admin,superadmin
 
