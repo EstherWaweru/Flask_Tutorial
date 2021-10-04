@@ -8,7 +8,7 @@ class Config(object):
     TESTING = False
     # openssl rand -hex 32
     SECRET_KEY = os.getenv('SECRET_KEY')
-    SQLALCHEMY_DATABASE_URI = os.getenv('DATABASE_URL',default=f"sqlite:///{os.path.join(BASEDIR, 'instance', 'app.db')}")
+    SQLALCHEMY_DATABASE_URI = os.getenv('DATABASE_URI')
     SQLALCHEMY_TRACK_MODIFICATIONS = False
      # Flask-Mail Configuration - GMail
     MAIL_SERVER = os.getenv('MAIL_SERVER')
