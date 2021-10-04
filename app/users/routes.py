@@ -8,7 +8,7 @@ from sqlalchemy.exc import IntegrityError
 #### routes ####
 ################
 
-@users_bp.route('/about')
+@users_bp.route('/')
 def about():
     flash('Thanks for the site', 'info')
     return render_template('users/about.html', company_name = 'KarehTech')

@@ -28,7 +28,7 @@ def create_app():
     app.config.from_object(config_type)
 
     initialize_extensions(app)
-    # register_blueprints(app)
+    register_blueprints(app)
     with app.app_context():
         database.create_all()
 
@@ -43,9 +43,10 @@ def initialize_extensions(app):
 
 def register_blueprints(app):
     # Import the blueprints
+    from .users import users_bp
     # Since the application instance is now created, register each Blueprint
     # with the Flask application instance (app)
-    pass
+    app.register_blueprint(users_bp)
 
 
 
