@@ -1,0 +1,44 @@
+version: '3.3'
+
+services:
+  web:
+    build:
+      context: .
+    command: gunicorn --bind 0.0.0.0:5000 main:app
+    ports:
+      - 5000:5000
+    volumes:
+      - ./:/app
+    environment:
+      - CONFIG_TYPE=config.DevelopmentConfig
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://redis:6379/0
+    depends_on:
+      - db
+  
+  db:
+    build:
+      context: ./db
+      dockerfile: Dockerfile
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    expose:
+      - 5432
+    environment:
+      - POSTRES_DB=tutorial
+  worker:
+    build: .
+    command: celery worker --app=main.celery --loglevel=info --logfile=logs/celery.log
+    volumes:
+      - ./:/app
+    environment:
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://redis:6379/0
+    depends_on:
+      - web
+      - redis
+  redis:
+    image: redis:6-alpine
+volumes:
+  postgres_data:
+  
