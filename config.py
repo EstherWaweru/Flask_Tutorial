@@ -18,6 +18,9 @@ class Config(object):
     MAIL_USERNAME = os.getenv('MAIL_USERNAME', default='')
     MAIL_PASSWORD = os.getenv('MAIL_PASSWORD', default='')
     MAIL_DEFAULT_SENDER = os.getenv('MAIL_USERNAME', default='')
+    #celery configurations
+    CELERY_RESULT_BACKEND = os.getenv('CELERY_RESULT_BACKEND')
+    CELERY_BROKER_URL = os.getenv('CELERY_BROKER_URL')
 
 
 class ProductionConfig(Config):
