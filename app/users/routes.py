@@ -3,13 +3,13 @@ from .forms import LoginForm, RegistrationForm
 from . import users_bp
 from flask import flash,render_template,abort,redirect,request,url_for,current_app
 from app.models import User
-from app import database,mail
+from app import database
 from sqlalchemy.exc import IntegrityError
 from itsdangerous import URLSafeTimedSerializer
 from itsdangerous.exc import BadSignature
-from flask_mail import Message
-from main import celery
-import time
+from ..tasks import send
+
+
 ################
 #### routes ####
 ################
@@ -54,30 +54,6 @@ def login():
                 return redirect(url_for('users.about'))
         flash('ERROR! Incorrect login credentials.', 'error')
     return render_template('users/login.html', form = form)
-
-#generate confiration email
-def generate_confirmation_email(user_email):
-    confirm_serializer = URLSafeTimedSerializer(Config.SECRET_KEY)
-    confirm_url = url_for('users.confirm_email',token = confirm_serializer.dumps(user_email, salt = 'email-confirmation-salt'),
-    _external=True)
-    return Message(subject ='Kareh Tech confirm email',
-    html = render_template('users/email_coonfirmation.html',confirm_url = confirm_url),recipients = [user_email])
-
-#send email confirmation
-@celery.task(name = 'celery_mail.send')
-def send(email,is_retry = False):
-     try:
-        message = generate_confirmation_email(email)
-        mail.send(message)
-        return 'Mail sent successfully.'
-     except Exception as e:
-        print('==================================')
-        print(f'Error: {e}')
-        print('==================================')
-        time.sleep(60) # Wait for a while, 1 minute tends to be a good measure as most configurations specify how many requests can be made a minute. 
-        if not is_retry:  # Only retry once -> you could modify this to make the use of a counter.
-            print('*****Attempting to send mail again...*****')
-            send(email, is_retry=True) # Try again
 
 @users_bp.route('/confirm/<token>')
 def confirm_email(token):
